@@ -57,13 +57,63 @@ def close_game():
    pygame.quit()
 
 def update():
-    global ba
+    global background1_y,background2_y
+    background1_y=(background1_y+1)%screenh
+    background2_y=background1_y-screenh
+    window.blit(background1,(0,background1_y))
+    window.blit(background1,(0,background2_y))
+
+background1_y=0
+background2_y= -screenh
 
 
 
 
 
 while game:
+    for event in pygame.event.get():
+        if event.type==pygame.QUIT:
+            game=False
+    keys=pygame.key.get_pressed()
+
+    if keys[pygame.K_LEFT]:
+        spacex-=spacespeed
+
+    if keys[pygame.K_RIGHT]:
+        spacex+=spacespeed
+        if spacex > screenw-space.get_width:
+            spacex=screenw-spacew.get_width
+
+    window.fill((0,0,0))
+
+    update.background()
+
+    window.blit(space,(spacex,spacey))
+
+    if random.randint(1,100)<2:
+        a_x=random.randint(30,screenw-30)
+        a_s=random.uniform(min_asteroids,max_asteroids)
+        astroid=asteroid(a_x,-int(asteroidh*a_s),asteroid_img,a_s)
+        asteroids.append(astroid)
+
+    astroid_rect = pygame.Rect(spacex, spacey, space.get_width(), space.get_height())
+
+
+    for astroid in asteroids:
+        astroid.move(1)
+        astroid_rect=pygame.Rect(astroid.x,astroid.y,astroid.image.get_width(),astroid.image.get_height())
+        astroid.draw(window)
+
+        if astroid_rect.colliderect(astroid_rect):
+            close_game()
+
+    astroid=[astroid for astroid in asteroids if astroid.y<screenh]
+    pygame.display.update()
+    clock.tick(60)
+
+
+pygame.quit()
+sys.exit()
 
 
 
@@ -73,5 +123,4 @@ while game:
 
 
 
-pygame.display.update()
 
