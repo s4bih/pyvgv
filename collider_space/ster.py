@@ -4,7 +4,7 @@ import sys
 
 pygame.init()
 
-screenw,screenh=800,600
+screenw,screenh=800,700
 window=pygame.display.set_mode((screenw,screenh))
 pygame.display.set_caption('ster')
 
@@ -15,7 +15,7 @@ background2=pygame.transform.scale(background1,(screenw,screenh))
 space=pygame.image.load('spaceship.png').convert_alpha()
 spacew,spaceh=space.get_size()
 spaces=0.15
-space=pygame.transform.scale(space,(int(spacew*spaces),int(spaceh*spaces))),int(spacew*spaces),int(spaceh*spaces)
+space=pygame.transform.scale(space,(int(spaceh*spaces),int(spacew*spaces)))
 
 spacex=screenw//2-spacew//2
 spacey=screenh-50
@@ -23,7 +23,7 @@ spacespeed=5
 
 class asteroid:
 
-    def __init__(self):
+    def __init__(self,x,y,image,scale,):
         self.x=x
         self.y=y
         self.image=image
@@ -36,12 +36,12 @@ class asteroid:
     def move(self,speed):
         self.y+=speed
 
-    def draw(self):
+    def draw(self,window):
         window.blit(self.image,(self.x,self.y))
 
 asteroid_img=pygame.image.load('asteroid.png').convert_alpha()
 asteroidw,asteroidh=asteroid_img.get_size()
-
+print(asteroidw,asteroidh)
 
 
 max_asteroids=0.15
@@ -53,8 +53,9 @@ clock=pygame.time.Clock()
 game=True
 
 def close_game():
-   pygame.exit()
-   pygame.quit()
+    pygame.quit()
+    sys.exit()
+
 
 def update():
     global background1_y,background2_y
@@ -81,12 +82,12 @@ while game:
 
     if keys[pygame.K_RIGHT]:
         spacex+=spacespeed
-        if spacex > screenw-space.get_width:
-            spacex=screenw-spacew.get_width
+        if spacex > screenw-space.get_width():
+            spacex=screenw-spacew.get_width()
 
     window.fill((0,0,0))
 
-    update.background()
+    update()
 
     window.blit(space,(spacex,spacey))
 
@@ -94,6 +95,7 @@ while game:
         a_x=random.randint(30,screenw-30)
         a_s=random.uniform(min_asteroids,max_asteroids)
         astroid=asteroid(a_x,-int(asteroidh*a_s),asteroid_img,a_s)
+        print(astroid)
         asteroids.append(astroid)
 
     astroid_rect = pygame.Rect(spacex, spacey, space.get_width(), space.get_height())
@@ -108,6 +110,7 @@ while game:
             close_game()
 
     astroid=[astroid for astroid in asteroids if astroid.y<screenh]
+
     pygame.display.update()
     clock.tick(60)
 
