@@ -22,10 +22,22 @@ class Snake:
         self.body=[(width//2-i*20,hight//2) for i in range(4)]
         self.direction=(1,0)
         self.speed=speed
+
     def move(self):
-        dx,dy=self.direction
-        new_head=(self.body[0][0]+20*dx,self.body[0][1]+20*dy)
-        self.body.insert(0,new_head)
+        head = self.get_head()
+        new_head = (head[0] + self.direction[0] * 20, head[1] + self.direction[1] * 20)
+
+        if new_head[1] >= hight:
+            new_head = (new_head[0], 0)
+        elif new_head[1] < 0:
+            new_head = (new_head[0], hight - 20)
+
+        if new_head[0] >= width:
+            new_head = (0, new_head[1])
+        elif new_head[0] < 0:
+            new_head = (width - 20, new_head[1])
+
+        self.body.insert(0, new_head)
         self.body.pop()
 
     def grow(self):
@@ -106,6 +118,7 @@ def main():
     snake=Snake(speed_level)
     food=Food()
 
+    score=0
     clock=pygame.time.Clock()
 
     while True:
@@ -123,6 +136,46 @@ def main():
                     snake.change_direction(1,0)
 
         snake.move()
-main()
+        head=snake.get_head()
 
+        if distance(head,food.get_position())<=20:
+            snake.grow()
+            food.respawn()
+            score+=1
+        if head in snake.get_body():
+            font=pygame.font.Font(None,50)
+            text=font.render("GAME OVER",True,black)
+            window.blit(text,(width//2-text.get_width()//2,hight//2-text.get_height()//2))
+            pygame.display.update()
+            pygame.time.delay(2)
+            pygame.quit()
+        if score>=10:
+            font=pygame.font.Font(None,50)
+            text=font.render("YOU WIN",True,black)
+            window.blit(text,(width//2-text.get_width()//2,hight//2-text.get_height()//2))
+            pygame.display.update()
+            pygame.time.delay(1000)
+            pygame.quit()
+        window.fill(white)
+        #draw snake and snake body is black
+        for de in snake.body:
+
+            pygame.draw.rect(window,black,(de[0],de[1],20,20))
+
+            # draw food
+            pygame.draw.circle(window, black, food.get_position(), 10)
+
+
+        font=pygame.font.Font(None,30)
+        text=font.render("Score: "+str(score),True,black)
+        window.blit(text,(10,10))
+        pygame .display.update()
+        clock.tick(speed_level)
+
+
+
+
+
+
+main()
 
