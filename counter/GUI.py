@@ -1,4 +1,5 @@
 import tkinter as tk
+import random
 window=tk.Tk()
 '''     
 root = tk.Tk()
@@ -30,6 +31,22 @@ def decrease():
     global counter
     counter -= 1
     counter_label.config(text=f"counter: {counter}")
+'''
+def blue():
+    colorname=["red","green","blue"]
+    window.config(bg=random.choice(colorname))
+
+blue_button=tk.Button(window,text="change bg color",command=blue)
+blue_button.pack(side="left",pady=20,padx=20)
+'''
+counter=0
+
+if counter >= 50:
+    window.config(bg="green")
+elif counter <= -50:
+    window.config(bg="red")
+else:
+    window.config(bg="white")
 
 counter = 0
 counter_label = tk.Label(window, text=f"counter: {counter}")
