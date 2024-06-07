@@ -4,7 +4,15 @@ from tkinter import messagebox
 
 
 def submit_form():
-    pass
+    name  = name_entry.get()
+    email = email_entry.get()
+    password = password_entry.get()
+    country=country_var.get()
+    gender = gender_combobox.get()
+    if name == "" or email == "" or  password == "" :
+        messagebox.showerror("Error", "Please fill in all fields")
+    else:
+        messagebox.showinfo("Success", "Form submitted successfully")
 
 window=tk.Tk()
 window.title("Form")
@@ -53,7 +61,22 @@ password_entry=ttk.Entry(window,show="*",style="TEntry")
 password_entry.grid(column=1,row=4,padx=10,pady=10)
 
 submit_button=ttk.Button(window,text="Submit",command=submit_form,style="TButton")
-submit_button.grid(column=1,row=5,padx=10,pady=10)
+submit_button.grid(column=1,row=6,padx=10,pady=10)
+
+country_var=tk.StringVar()
+country_var.set("Indonesia")
+
+country_combobox=ttk.Combobox(window,textvariable=country_var,values=["India","USA","UK"],style="TCombobox")
+country_combobox.grid(column=1,row=5,padx=10,pady=10)
+
+submit_button_style=ttk.Style()
+submit_button_style.map(
+    style="TButton",
+    foreground=[("pressed","red"),("active","blue")],
+    background=[("pressed","black"),("active","white")]
+
+)
+
 
 
 
